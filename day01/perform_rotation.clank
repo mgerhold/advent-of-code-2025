@@ -1,0 +1,14 @@
+PARAMS start_position, rotation;
+LET position = $start_position;
+LET direction = rotation[0];
+LET num_clicks = $join(for 1..<$'length'(rotation) as i yeet rotation[i]);
+LET crosses_zero = (
+    (direction == 'L' and position != 0 and num_clicks % 100 >= position)
+    or (direction == 'R' and position != 0 and num_clicks % 100 >= 100 - position)
+);
+LET num_crossings = $crosses_zero + $'floor'(num_clicks / 100);
+LET end_position = (position + (direction == 'R' ? num_clicks % 100 : 100 - num_clicks % 100)) % 100;
+PRINT end_position;
+PRINT ',';
+PRINT num_crossings;
+

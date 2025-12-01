@@ -1,0 +1,13 @@
+PARAMS filename;
+LET lines = split('trim'('read_file'(filename)), '\n');
+LET results = fold lines as ['50,0'], acc, line with (
+    acc + [
+        '!perform_rotation'(
+            $split(acc[$'length'(acc) - 1], ',')[0],
+            line
+        )
+    ]
+);
+LET num_zeroes = fold results as 0, acc, result with acc + $split(result, ',')[1];
+PRINT num_zeroes;
+

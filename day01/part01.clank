@@ -1,0 +1,17 @@
+PARAMS filename;
+LET lines = split('trim'('read_file'(filename)), '\n');
+LET numbers = for lines as line yeet $join(for 1..<$'length'(line) as i yeet line[i]);
+LET positions = fold 0..<$'length'(numbers) as [50], acc, line_number with (
+    acc + [
+        (
+            acc[$'length'(acc) - 1] + (
+                lines[line_number][0] == 'R'
+                ? numbers[line_number]
+                : 100 - numbers[line_number]
+            )
+        ) % 100
+    ]
+);
+LET result = $'length'(for positions as position if position == 0 yeet true);
+PRINT result;
+

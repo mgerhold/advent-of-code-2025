@@ -1,0 +1,23 @@
+PARAMS filename;
+LET input = 'read_file'(filename);
+LET parts = for split('trim'(input), ',') as part yeet (split(part, '-'));
+LET ranges = for parts as part yeet ($part[0]..=$part[1]);
+LET string_ranges = for ranges as range yeet (for range as n yeet #n);
+LET filtered_ranges = for string_ranges as range yeet (
+    for range as number_string
+    if (
+        $'length'(number_string) % 2 == 0
+        and (
+            join(for 0 ..< $'length'(number_string) / 2 as i yeet number_string[i])
+            == join(for $'length'(number_string) / 2 ..< ($'length'(number_string)) as i yeet number_string[i])
+        )
+    )
+    yeet $number_string
+);
+LET sum = fold filtered_ranges as 0, acc, range with (
+    $'length'(range) == 0
+    ? acc
+    : (fold range as 0, inner_acc, n with inner_acc + n) + acc
+);
+PRINT sum;
+

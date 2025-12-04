@@ -1,0 +1,35 @@
+let lines = read("day04.txt").split('\n');
+
+let num_reachable = 0;
+for y in 0..lines.size {
+    if lines[y].length == 0 {
+        continue;
+    }
+    //println(lines[y]);
+    for x in 0..lines[y].length {
+        if lines[y][x] != '@' {
+            continue;
+        }
+        let num_rolls = 0;
+        for v in y-1..=y+1 {
+            for u in x-1..=x+1 {
+                if (u == x and v == y)
+                   or u < 0
+                   or u >= lines.size
+                   or v < 0
+                   or v >= lines[y].length {
+                    continue;
+                }
+                if lines[v][u] == '@' {
+                    num_rolls += 1;
+                }
+            }
+        }
+        if num_rolls < 4 {
+            //println("Found at " + x + ", " + y);
+            num_reachable += 1;
+        }
+    }
+}
+
+println(num_reachable);

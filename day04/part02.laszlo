@@ -1,0 +1,59 @@
+let lines = read("day04.txt").split('\n');
+
+let total = 0;
+while true {
+    let new_lines = [];
+    let num_removed = 0;
+    for y in 0..lines.size {
+        if lines[y].length == 0 {
+            new_lines += [lines[y]];
+            continue;
+        }
+        //println(lines[y]);
+        let new_line = "";
+        for x in 0..lines[y].length {
+            if lines[y][x] != '@' {
+                new_line += '.';
+                continue;
+            }
+            let num_rolls = 0;
+            for v in y-1..=y+1 {
+                for u in x-1..=x+1 {
+                    if (u == x and v == y)
+                       or u < 0
+                       or u >= lines.size
+                       or v < 0
+                       or v >= lines[y].length {
+                        continue;
+                    }
+                    if lines[v][u] == '@' {
+                        num_rolls += 1;
+                    }
+                }
+            }
+            if num_rolls < 4 {
+                //println("Found at " + x + ", " + y);
+                num_removed += 1;
+                new_line += '.';
+            } else {
+                new_line += '@';
+            }
+        }
+        new_lines += [new_line];
+    }
+    lines = new_lines;
+    //println("============");
+    //println(lines.size);
+    //for line in lines {
+    //    println(line);
+    //}
+    total += num_removed;
+    if num_removed == 0 {
+        break;
+    }
+}
+
+for line in lines {
+    println(line);
+}
+println(total);
